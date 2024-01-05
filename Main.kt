@@ -44,9 +44,7 @@ fun storeMeasurement(msmt: Measurement, jdbiConnection: Jdbi): Measurement {
                     RETURNING lng, lpg, co, datetime::TEXT
                 """.trimMargin()
                 val result = handle.createUpdate(sql)
-                    .bind("lpg", msmt.lpg)
-                    .bind("lng", msmt.lng)
-                    .bind("co", msmt.co)
+                    .bindBean(msmt)
                     .executeAndReturnGeneratedKeys("lng", "lpg", "co", "datetime")
                     .mapTo(Measurement::class.java)
                     .findOnly()
